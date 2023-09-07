@@ -1,0 +1,72 @@
+from task_lib.time_estimate import TimeEstimate
+from task_lib.context import PlanContext
+
+from enum import Enum
+
+def depends_auto(items):
+  if items is None:
+    return list()
+  return [x.id for x in items]
+
+
+class TaskState(Enum):
+   OPEN="open",
+   IN_PROGRESS="in progress"
+   DONE="done"
+   CLOSED="closed"
+
+
+class Task:
+    def __init__(self, name=None, depends=None, estimate=None, due_date=None, **kw):
+        self._name = name
+        self._depends = depends_auto(depends)
+        self._estimate = TimeEstimate.auto(estimate)
+        self._id = None
+        self._due_date = None
+        self._status = TaskState.OPEN
+        for key, value in kw.items():
+            if key == 'n' and name is None:
+                self._name = value
+            elif key == 'e' and estimate is None:
+                self._estimate = TimeEstimate.auto(value)
+            elif key == 'd' and depends is None:
+                self._depends = depends_auto(value)
+        PlanContext().default_plan.register_item(self)
+
+    @property
+    def status(self):
+        return self._status
+
+    @property
+    def id(self):
+        return self._id
+    
+    def set_id(self, new_id):
+        self._id = new_id
+        
+    @property
+    def name(self):
+        return self._name
+        
+    @property
+    def depends(self):
+        return self._depends
+
+    def add_dependency(self, item):
+        self._depends += depends_auto([item])
+    
+    @property
+    def estimate(self):
+        return self._estimate
+        
+    def __repr__(self):
+        return f"<Task {self._id} {self._name} {self._estimate}>"
+    
+    def __add__(self, other):
+        if isinstance(other, Task):
+            epic = Epic(tasks=[self, other])
+            epic.recalculate_estimate()
+            return epic
+        else:
+            raise
+
