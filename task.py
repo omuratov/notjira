@@ -1,64 +1,11 @@
+from task_lib.base import Base
 from task_lib.time_estimate import TimeEstimate
-from task_lib.context import PlanContext
-
-from enum import Enum
-
-def depends_auto(items):
-  if items is None:
-    return list()
-  return [x.id for x in items]
 
 
-class TaskState(Enum):
-   OPEN="open",
-   IN_PROGRESS="in progress"
-   DONE="done"
-   CLOSED="closed"
-
-
-class Task:
-    def __init__(self, name=None, depends=None, estimate=None, due_date=None, **kw):
-        self._name = name
-        self._depends = depends_auto(depends)
-        self._estimate = TimeEstimate.auto(estimate)
-        self._id = None
-        self._due_date = None
-        self._status = TaskState.OPEN
-        for key, value in kw.items():
-            if key == 'n' and name is None:
-                self._name = value
-            elif key == 'e' and estimate is None:
-                self._estimate = TimeEstimate.auto(value)
-            elif key == 'd' and depends is None:
-                self._depends = depends_auto(value)
-        PlanContext().default_plan.register_item(self)
-
-    @property
-    def status(self):
-        return self._status
-
-    @property
-    def id(self):
-        return self._id
-    
-    def set_id(self, new_id):
-        self._id = new_id
-        
-    @property
-    def name(self):
-        return self._name
-        
-    @property
-    def depends(self):
-        return self._depends
-
-    def add_dependency(self, item):
-        self._depends += depends_auto([item])
-    
-    @property
-    def estimate(self):
-        return self._estimate
-        
+class Task(Base):
+    def __init__(self, name=None, **kw):
+       super(Task, self).__init__(name=name, **kw)
+       
     def __repr__(self):
         return f"<Task {self._id} {self._name} {self._estimate}>"
     
@@ -70,3 +17,42 @@ class Task:
         else:
             raise
 
+
+class Epic(Base):
+    def __init__(self, name=None, tasks=None, **kw):
+        super(Epic, self).__init__(name=name, **kw)
+        if tasks is not None:
+            self._tasks = [x for x in tasks]
+        else:
+            self._tasks = list()
+        for key, value in kw:
+           if key == 'tasks' and tasks is None:
+               self._tasks = [x for x in value]
+
+    def recalculate_estimate(self):
+        self._estimate = TimeEstimate(0)
+        for task in self._tasks:
+            self._estimate += task.estimate
+            
+    def __add__(self, other):
+        if isinstance(other, Task):
+            self._tasks.append(other)
+            self.recalculate_estimate()
+            return self
+        else:
+            raise
+                
+    @property
+    def tasks(self):
+        return self._tasks
+    
+    @tasks.setter
+    def tasks(self, tasks):
+        self.tasks = [x for x in tasks]
+        
+    def __repr__(self):
+        repr_string = f"<Epic {self.id} {self.name} tasks:\n"
+        for task in self._tasks:
+            repr_string += f"{task.id}:  {task.name}  {task.estimate}\n"
+        repr_string += f"Total estimate {self.estimate}"
+        return repr_string

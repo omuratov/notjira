@@ -1,7 +1,7 @@
 from task_lib.task import Task, TimeEstimate
 from task_lib.context import PlanContext
 
-class Epic:
+class NotEpic:
     def __init__(self, name=None, tasks=None, estimate=None):
         self._name = name
         self._id = None

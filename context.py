@@ -36,6 +36,9 @@ class Plan:
     
     def make_default(self):
         PlanContext().default_plan = self
+    
+    def get_item(self, item_id):
+        return self._item_pool[item_id]
 
 
 default_plan = Plan()
