@@ -1,23 +1,4 @@
 
-class PlanContext(object):
-    _context = None
-    
-    def __new__(cls):
-        if cls._context is None:
-            print('creating new PlanContext')
-            cls._context = super(PlanContext, cls).__new__(cls)
-            cls._context.default_plan = None
-        return cls._context
-        
-    @property
-    def default_plan(self) -> Plan:
-        return self._default_plan
-    
-    @default_plan.setter
-    def default_plan(self, new_plan):
-        self._default_plan = new_plan
-
-
 class Plan:
     def __init__(self, make_default=True):
         self._id_counter = 0
@@ -39,6 +20,27 @@ class Plan:
     
     def get_item(self, item_id):
         return self._item_pool[item_id]
+
+
+
+class PlanContext(object):
+    _context = None
+    
+    def __new__(cls):
+        if cls._context is None:
+            print('creating new PlanContext')
+            cls._context = super(PlanContext, cls).__new__(cls)
+            cls._context.default_plan = None
+        return cls._context
+        
+    @property
+    def default_plan(self) -> Plan:
+        return self._default_plan
+    
+    @default_plan.setter
+    def default_plan(self, new_plan):
+        self._default_plan = new_plan
+
 
 
 default_plan = Plan()

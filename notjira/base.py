@@ -1,5 +1,5 @@
-from task_lib.time_estimate import TimeEstimate
-from task_lib.context import PlanContext
+from notjira.time_estimate import TimeEstimate
+from notjira.context import PlanContext
 
 from enum import Enum
 

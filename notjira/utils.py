@@ -1,5 +1,5 @@
-from task_lib.context import PlanContext 
-from task_lib.base import Base
+from notjira.context import PlanContext 
+from notjira.base import Base
 
 
 def dependency_list(task_or_task_id):

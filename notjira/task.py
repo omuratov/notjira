@@ -1,5 +1,5 @@
-from task_lib.base import Base
-from task_lib.time_estimate import TimeEstimate
+from notjira.base import Base
+from notjira.time_estimate import TimeEstimate
 
 
 class Task(Base):
