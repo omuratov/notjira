@@ -10,7 +10,7 @@ class PlanContext(object):
         return cls._context
         
     @property
-    def default_plan(self):
+    def default_plan(self) -> Plan:
         return self._default_plan
     
     @default_plan.setter
