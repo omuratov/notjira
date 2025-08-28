@@ -21,6 +21,29 @@ class Plan:
     def get_item(self, item_id):
         return self._item_pool[item_id]
 
+    def items(self):
+        """Return all registered planning items."""
+        return list(self._item_pool.values())
+
+    def clear(self, keep_ids=False):
+        """Remove all items from the plan.
+
+        Args:
+            keep_ids: If True, keep incrementing id counter (ids won't be reused).
+                      If False, reset id counter to 0.
+        """
+        self._item_pool.clear()
+        if not keep_ids:
+            self._id_counter = 0
+
+
+def clear_default_plan(keep_ids=False):
+    """Convenience: clear the current default plan in-place."""
+    ctx = PlanContext()
+    if ctx.default_plan is None:
+        return
+    ctx.default_plan.clear(keep_ids=keep_ids)
+
 
 
 class PlanContext(object):

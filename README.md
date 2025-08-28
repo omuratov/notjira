@@ -5,7 +5,8 @@
 
 ```python
 from notjira.task import Task, TimeEstimate, Epic
-from notjira.utils import dependency_list
+from notjira.utils import dependency_list, gantt_ascii
+from notjira.chart import gantt_matplotlib
 
 
 # creating a task
@@ -37,6 +38,16 @@ task_e = Task('e', d=task_c)
 
 assert task_a.id in dependency_list(task_d)
 assert task_e.id not in dependency_list(task_d)
+
+# Gantt chart (ASCII)
+print(gantt_ascii())
+
+# Gantt chart (matplotlib)
+# Requires: pip install matplotlib
+gantt_matplotlib(filename='plan.png')
+# Epic summary only
+gantt_matplotlib(filename='plan_epics.png', epic_only=True)
+print('Saved to plan.png')
 ```
 
 ## Concepts

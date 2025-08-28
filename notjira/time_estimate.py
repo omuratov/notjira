@@ -9,13 +9,27 @@ class TimeEstimate:
             return f"{self.days:0.1f}d"
         else:
             return f"{self.hours:0.1f}h"
+
+    def __mul__(self, other):
+        if isinstance(other, int) or isinstance(other, float):
+            return TimeEstimate(self._value * other)
+        else:
+            raise
         
     def __add__(self, other):
         if isinstance(other, TimeEstimate):
             return TimeEstimate(value_hours=(self.hours + other.hours))
         elif other is None:
             return self
+        elif isinstance(other, list):
+            for item in other:
+                self += item 
+            return self 
         else:
+            try:
+                return other.estimate + self
+            except:
+                print("Cannot sum up")
             raise
         
     @property
