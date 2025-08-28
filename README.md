@@ -52,3 +52,26 @@ print('Saved to plan.png')
 
 ## Concepts
 TODO
+
+## Packaging
+
+Build and publish (requires build tool):
+
+```bash
+python -m pip install --upgrade pip build twine
+python -m build
+twine check dist/*
+twine upload dist/*  # requires credentials
+```
+
+Install locally for development editable mode:
+
+```bash
+pip install -e .
+```
+
+Minimal dependencies: core library works without matplotlib (only ASCII Gantt). Install optional extras:
+
+```bash
+pip install notjira[all]
+```

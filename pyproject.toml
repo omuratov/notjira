@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "notjira"
+version = "0.1.0"
+description = "Programmer friendly minimal planning and Gantt tooling"
+readme = "README.md"
+authors = [ { name = "omuratov" } ]
+license = { text = "MIT" }
+requires-python = ">=3.8"
+keywords = ["planning", "gantt", "tasks", "productivity"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
+]
+dependencies = [
+    "matplotlib>=3.5" ,
+]
+
+[project.optional-dependencies]
+all = ["matplotlib>=3.5"]
+
+[tool.setuptools]
+packages = ["notjira"]
+
+[tool.setuptools.package-data]
+notjira = []
+
+[project.urls]
+Homepage = "https://github.com/omuratov/notjira"
+Repository = "https://github.com/omuratov/notjira"
+
